@@ -1,0 +1,37 @@
+Armour-Helm: Diamond_Helmet
+Armour-Chest: Diamond_ChestPlate
+Armour-Legs: DIAMOND_LEGGINGS
+Armour-Boots: Diamond_Boots
+Armour-Protection: 10
+Armour-Unbreaking: 10
+Armour-Fire: 10
+Armour-Projectile: 10
+Bow-Power: 10
+Bow-Knock: 2
+Bow-Fire: 2
+Sword-Sharp: 5
+Sword-Knock: 2
+Sword-Fire: 2
+Stick-Knock: 2
+Apple-Ammount: 64
+Pork-Ammount: 64
+Duty-On-Message: '&a %p is now on duty!'
+Duty-Off-Message: '&a %p is now off duty!'
+Duty-dead-Message: '&a %p is now off duty because he died!'
+Guard-Death-Message: '&4The guard %p has been slain!'
+Sword-Name: '&4Guards Sword'
+Bow-Name: '&4Guards Bow'
+Stick-Name: '&4Batton'
+Helmet-Name: '&4Guards Helmet'
+Chestplate-Name: '&4Guards Chestplate'
+Leggings-Name: '&4Guards Leggings'
+Boots-Name: '&4Guards Boots'
+Server-Name: 'ArkhamLockup'
+MOTD-On: true
+Rewards:
+    - 'xp give %p 825'
+Banned-Commands:
+    - 'Auc'
+    - 'Auction'
+    - 'f'
+    - 'factions'

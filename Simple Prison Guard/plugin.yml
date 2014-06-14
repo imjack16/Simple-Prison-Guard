@@ -1,0 +1,15 @@
+name: JailDuty
+version: 1.5
+main: me.imjack.arkham.JailDuty
+commands:
+    duty:
+        description: changes the player into a guard
+    duty help:
+        description: displays help
+    duty convert:
+        description: displays help
+permissions:
+    Jail.duty.command:
+        description: allows you to use the duty command
+    Jail.duty.convert:
+        description: allows you to use convert the configs to UUIDS
