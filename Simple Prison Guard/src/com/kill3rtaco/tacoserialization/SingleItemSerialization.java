@@ -46,6 +46,7 @@ public class SingleItemSerialization {
 		return serializeItems(items, false, 0);
 	}
 	
+	@SuppressWarnings("deprecation")
 	private static JSONObject serializeItems(ItemStack items, boolean useIndex, int index) {
 		try {
 			JSONObject values = new JSONObject();
@@ -144,6 +145,7 @@ public class SingleItemSerialization {
 	 * @param index The index of the ItemStack in an inventory or ItemStack array
 	 * @return The deserialized ItemStack
 	 */
+	@SuppressWarnings("deprecation")
 	public static ItemStack getItem(JSONObject item, int index) {
 		try {
 			int id = item.getInt("id");

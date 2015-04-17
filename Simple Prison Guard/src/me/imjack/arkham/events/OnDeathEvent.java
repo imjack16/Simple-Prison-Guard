@@ -1,46 +1,64 @@
 package me.imjack.arkham.events;
 
-import java.io.File;
-import java.util.List;
+import java.util.Random;
+import java.util.Map.Entry;
 
+import me.imjack.arkham.GuardManager;
 import me.imjack.arkham.JailDuty;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class OnDeathEvent implements Listener {
-	static JailDuty plugin;
+	JailDuty plugin;
 
 	public OnDeathEvent(JailDuty instance) {
 		plugin = instance;
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void GuardDeath(PlayerDeathEvent event) {
-		Player player = event.getEntity().getPlayer();
-		File folder = new File(plugin.getDataFolder() + "/", "Guard Data");
-		File GuardInv = new File(folder, player.getUniqueId().toString() + ".yml");
-		YamlConfiguration Guardconfig = YamlConfiguration
-				.loadConfiguration(GuardInv);
-		if (GuardInv.exists()) {
-			if (Guardconfig.getBoolean("onGuard") == true) {
-				List<String> reward = plugin.getConfig().getStringList("Rewards");
+		Player player = event.getEntity().getPlayer();// person who died
+		if (!player.hasPermission("Jail.duty.command")) {
+			return;
+		}
+
+		if (GuardManager.getManager().getGuardData(player.getUniqueId()) == null) {
+			return;
+		}
+		if (player.getKiller() instanceof Player) {
+			if (GuardManager.getManager().getGuardData(player.getUniqueId()).isOnDuty()) {
 				event.getDrops().clear();
-				if (event.getEntity().getKiller() instanceof Player) {
-					Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&',  ChatColor.GRAY + "[" + ChatColor.GOLD + plugin.getConfig().getString("Server-Name") + ChatColor.GRAY + "]" + ChatColor.RESET + plugin.getConfig().getString("Guard-Death-Message").replace("%p", player.getName())));
-			            for (String string : reward){
-			                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), string.replace("%p", event.getEntity().getKiller().getName()));
-			            }
-						return;
+				event.setDroppedExp(0);
+				for (String reward : plugin.guaranteedRewards) {
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+							reward.replace("%p", event.getEntity().getKiller().getName()));
 				}
-				Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&',  ChatColor.GRAY + "[" + ChatColor.GOLD + plugin.getConfig().getString("Server-Name") + ChatColor.GRAY + "]" + ChatColor.RESET + plugin.getConfig().getString("Duty-dead-Message").replace("%p", player.getName())));
-				return;
+				Bukkit.getServer().broadcastMessage(
+						ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Guard-Death-Message")
+								.replace("%p", player.getName()).replace("%k", player.getKiller().getName())));
+				Random random = new Random();
+				int timesWon = 0;
+				double rand;
+				for (Entry<Double, String> entry : plugin.randomRewards.entries()) {
+					rand = random.nextDouble() * 100;
+					if (entry.getKey() > rand) {
+						if (timesWon != plugin.maxRandomRewards) {
+							Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+									entry.getValue().replace("%p", event.getEntity().getKiller().getName()));
+							timesWon++;
+						}
+					}
+				}
 			}
+		} else {
+			event.getDrops().clear();
+			event.setDroppedExp(0);
 		}
 	}
 }

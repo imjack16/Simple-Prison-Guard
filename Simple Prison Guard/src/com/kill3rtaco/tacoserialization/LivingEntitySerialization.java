@@ -31,6 +31,7 @@ public class LivingEntitySerialization {
 	 * @param entity
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static JSONObject serializeEntity(LivingEntity entity) {
 		if(entity instanceof Player) {
 			return PlayerSerialization.serializePlayer((Player) entity);
@@ -114,6 +115,7 @@ public class LivingEntitySerialization {
 	 * @param stats The stats of the entity
 	 * @return The LivingEntity spawned
 	 */
+	@SuppressWarnings("deprecation")
 	public static LivingEntity spawnEntity(Location location, JSONObject stats) {
 		try {
 			if(!stats.has("type")) {

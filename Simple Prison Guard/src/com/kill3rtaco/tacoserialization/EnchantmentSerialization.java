@@ -40,6 +40,7 @@ public class EnchantmentSerialization {
 	 * @param enchantments The Enchantment Map to serialize
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static String serializeEnchantments(Map<Enchantment, Integer> enchantments) {
 		String serialized = "";
 		for(Enchantment e : enchantments.keySet()) {
@@ -53,6 +54,7 @@ public class EnchantmentSerialization {
 	 * @param serializedEnchants The serialization string to decode
 	 * @return A Map of enchantments and their levels
 	 */
+	@SuppressWarnings("deprecation")
 	public static Map<Enchantment, Integer> getEnchantments(String serializedEnchants) {
 		HashMap<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
 		if(serializedEnchants.isEmpty())
@@ -81,6 +83,7 @@ public class EnchantmentSerialization {
 	 * @param oldFormat The old (ChestShop compatible) enchantment code.
 	 * @return A map of enchantments and their levels using the old (ChestShop compatible) enchantment code.
 	 */
+	@SuppressWarnings("deprecation")
 	public static Map<Enchantment, Integer> getEnchantsFromOldFormat(String oldFormat) {
 		HashMap<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
 		if(oldFormat.length() == 0) {

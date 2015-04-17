@@ -3,6 +3,7 @@ package me.imjack.arkham.events;
 import java.io.File;
 import java.io.IOException;
 
+import me.imjack.arkham.GuardManager;
 import me.imjack.arkham.JailDuty;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,7 +15,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import com.kill3rtaco.tacoserialization.InventorySerialization;
 
 public class OnRespawnEvent implements Listener {
-	static JailDuty plugin;
+
+	JailDuty plugin;
 
 	public OnRespawnEvent(JailDuty instance) {
 		plugin = instance;
@@ -23,19 +25,29 @@ public class OnRespawnEvent implements Listener {
 	@EventHandler
 	public void guardReSpawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
-		File folder = new File(plugin.getDataFolder(), "Guard Data");
-		File GuardInv = new File(folder, player.getUniqueId().toString() + ".yml");
-		YamlConfiguration Guardconfig = YamlConfiguration.loadConfiguration(GuardInv);
-		if (GuardInv.exists()) {
-			if (Guardconfig.getBoolean("onGuard") == true) {
-				Guardconfig.set("onGuard", false);
-				InventorySerialization.setPlayerInventory(player, Guardconfig.getString("Inventory"));
-					try {
-						Guardconfig.save(GuardInv);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+		File file = new File(plugin.getDataFolder() + File.separator + "Guard Data", player.getUniqueId() + ".yml");
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+
+		if (!player.hasPermission("Jail.duty.command")) {
+			return;
+		}
+
+		if(GuardManager.getManager().getGuardData(player.getUniqueId()) == null){
+			return;
+		}
+
+		if (GuardManager.getManager().getGuardData(player.getUniqueId()).isOnDuty()) {
+			config.set("onGuard", false);
+
+			try {
+				config.save(file);
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
+
+			GuardManager.getManager().getGuardData(player.getUniqueId()).setOnDuty(false);
+			InventorySerialization.setPlayerInventory(player,
+					GuardManager.getManager().getGuardData(player.getUniqueId()).getInventory());
 		}
 	}
 }

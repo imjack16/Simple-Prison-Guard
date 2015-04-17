@@ -1,31 +1,36 @@
 package me.imjack.arkham.events;
 
-import java.io.File;
+import me.imjack.arkham.GuardManager;
 
-import me.imjack.arkham.JailDuty;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 
 public class ItemClickEvent implements Listener {
-	static JailDuty plugin;
-
-	public ItemClickEvent(JailDuty instance) {
-		plugin = instance;
-	}
 
 	@EventHandler
 	public void Invclick(InventoryClickEvent event) {
 		if (event.getWhoClicked() instanceof Player) {
 			Player player = (Player) event.getWhoClicked();
-			File folder = new File(plugin.getDataFolder() + "/", "Guard Data");
-			File GuardInv = new File(folder, player.getUniqueId().toString() + ".yml");
-			YamlConfiguration Guardconfig = YamlConfiguration.loadConfiguration(GuardInv);
-			if (GuardInv.exists()) {
-				if (Guardconfig.getBoolean("onGuard") == true) {
+
+			if (!player.hasPermission("Jail.duty.command")) {
+				return;
+			}
+
+			if (GuardManager.getManager().getGuardData(player.getUniqueId()) == null) {
+				return;
+			}
+
+			if (GuardManager.getManager().getGuardData(player.getUniqueId()).isOnDuty()) {
+				if (event.getAction().equals(InventoryAction.DROP_ALL_CURSOR)
+						|| event.getAction().equals(InventoryAction.DROP_ALL_SLOT)
+						|| event.getAction().equals(InventoryAction.DROP_ONE_CURSOR)
+						|| event.getAction().equals(InventoryAction.DROP_ONE_SLOT)
+						|| event.getAction().equals(InventoryAction.UNKNOWN)
+						|| event.getView().getType() != InventoryType.CRAFTING) {
 					event.setCancelled(true);
 				}
 			}

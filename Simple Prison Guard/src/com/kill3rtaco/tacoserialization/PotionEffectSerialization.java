@@ -35,6 +35,7 @@ public class PotionEffectSerialization {
 	 * @param effects The PotionEffects to serialize
 	 * @return The serialized PotionEffects
 	 */
+	@SuppressWarnings("deprecation")
 	public static String serializeEffects(Collection<PotionEffect> effects) {
 		String serialized = "";
 		for(PotionEffect e : effects) {
@@ -48,6 +49,7 @@ public class PotionEffectSerialization {
 	 * @param serializedEffects The potion effect code to decode from
 	 * @return A Collection of PotionEffects from the given potion effect code
 	 */
+	@SuppressWarnings("deprecation")
 	public static Collection<PotionEffect> getPotionEffects(String serializedEffects) {
 		ArrayList<PotionEffect> effects = new ArrayList<PotionEffect>();
 		if(serializedEffects.isEmpty())

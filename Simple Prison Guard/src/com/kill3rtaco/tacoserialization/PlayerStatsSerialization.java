@@ -115,6 +115,7 @@ public class PlayerStatsSerialization {
 	 * @param player The player to affect
 	 * @param stats The stats to apply
 	 */
+	@SuppressWarnings("deprecation")
 	public static void applyPlayerStats(Player player, JSONObject stats) {
 		try {
 			if(stats.has("can-fly"))
